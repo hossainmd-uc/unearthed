@@ -31,22 +31,13 @@ async function createGiftsTable() {
 const seedGiftsTable = async () => {
   await createGiftsTable()
 
-  giftData.forEach((gift) => {
-    const insertQuery = {
-        text: 'INSERT INTO gifts (name, pricePoint, audience, image, description, submittedBy, submittedOn) VALUES ($1, $2, $3, $4, $5, $6, $7)'
-    }
 
-    const values = [
-    gift.name,
-    gift.pricePoint,
-    gift.audience,
-    gift.image,
-    gift.description,
-    gift.submittedBy,
-    gift.submittedOn
-    ]
+  for(const gift of giftData){
+    const insertQuery = 'INSERT INTO gifts (name, pricePoint, audience, image, description, submittedBy, submittedOn) VALUES ($1, $2, $3, $4, $5, $6, $7)'
+    
+    const values = [gift.name, gift.pricePoint, gift.audience, gift.image, gift.description, gift.submittedBy, gift.submittedOn]
 
-    pool.query(insertQuery, values, (err, res) => {
+    await pool.query(insertQuery, values, (err, res) => {
     if (err) {
         console.error('⚠️ error inserting gift', err)
         return
@@ -54,9 +45,8 @@ const seedGiftsTable = async () => {
 
     console.log(`✅ ${gift.name} added successfully`)
     })
+    }
 
-
-    })
 
 }
 
